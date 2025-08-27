@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AR Experience with Marker, PNG Image, Audio, and Exit Button</title>
+  <meta name="description" content="Web-based AR using AR.js and A-Frame: Marker-based with PNG image, audio playback, and exit button.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/aframe-ar.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    #ar-scene { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    #exit-button { 
+      position: absolute; 
+      bottom: 20px; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      padding: 10px 20px; 
+      background-color: #ff0000; 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      font-size: 16px; 
+      cursor: pointer; 
+      z-index: 10; 
+    }
+  </style>
+</head>
+<body>
+  <a-scene id="ar-scene" embedded arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best; debugUIEnabled: false;">
+    <!-- Маркер (pattern-based, згенерований через AR.js generator) -->
+    <a-marker type="pattern" url="custom-marker.patt">
+      <!-- PNG зображення, що з'являється над маркером -->
+      <a-image src="logo.png" width="1" height="1" position="0 0 0" rotation="-90 0 0"></a-image>
+      
+      <!-- Аудіо, що відтворюється автоматично при виявленні маркера -->
+      <a-sound src="beep.mp3" autoplay="false" on="markerFound" position="0 0 0"></a-sound>
+    </a-marker>
+    
+    <!-- Камера для AR -->
+    <a-entity camera></a-entity>
+  </a-scene>
+  
+  <!-- Кнопка виходу (вихід з AR-режиму шляхом зупинки сцени) -->
+  <button id="exit-button" onclick="exitAR()">Вихід з AR</button>
+  
+  <script>
+    function exitAR() {
+      const scene = document.querySelector('a-scene');
+      scene.pause(); // Зупиняємо сцену
+      scene.style.display = 'none'; // Ховаємо сцену
+      // Опціонально: показати повідомлення або повернутися до основної сторінки
+      alert('AR режим вимкнено. Перезавантажте сторінку для повторного запуску.');
+    }
+  </script>
+</body>
+</html>
