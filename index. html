@@ -28,30 +28,38 @@
 </head>
 <body>
   <a-scene id="ar-scene" embedded arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best; debugUIEnabled: false;">
-    <!-- Маркер (pattern-based, згенерований через AR.js generator) -->
-    <a-marker type="pattern" url="custom-marker.patt">
-      <!-- PNG зображення, що з'являється над маркером -->
-      <a-image src="logo.png" width="1" height="1" position="0 0 0" rotation="-90 0 0"></a-image>
+    <!-- Маркер (використовуємо ваш згенерований marker.patt) -->
+    <a-marker type="pattern" url="./marker.patt">
+      <!-- PNG зображення -->
+      <a-image src="./logo.png" width="1" height="1" position="0 0 0" rotation="-90 0 0"></a-image>
       
-      <!-- Аудіо, що відтворюється автоматично при виявленні маркера -->
-      <a-sound src="beep.mp3" autoplay="false" on="markerFound" position="0 0 0"></a-sound>
+      <!-- Аудіо -->
+      <a-sound src="./beep.mp3" autoplay="false" on="markerFound" position="0 0 0"></a-sound>
     </a-marker>
     
     <!-- Камера для AR -->
     <a-entity camera></a-entity>
   </a-scene>
   
-  <!-- Кнопка виходу (вихід з AR-режиму шляхом зупинки сцени) -->
+  <!-- Кнопка виходу -->
   <button id="exit-button" onclick="exitAR()">Вихід з AR</button>
   
   <script>
     function exitAR() {
       const scene = document.querySelector('a-scene');
-      scene.pause(); // Зупиняємо сцену
-      scene.style.display = 'none'; // Ховаємо сцену
-      // Опціонально: показати повідомлення або повернутися до основної сторінки
+      scene.pause();
+      scene.style.display = 'none';
       alert('AR режим вимкнено. Перезавантажте сторінку для повторного запуску.');
     }
-  </script>
+
+    // Обробка помилок AR.js
+    AFRAME.registerComponent('ar-error', {
+      init: function () {
+        this.el.addEventListener('arjs-video-error', function () {
+          alert('Помилка: не вдалося ініціалізувати веб-камеру. Перевірте доступ до камери та HTTPS.');
+        });
+      }
+    });
+  </a-scene>
 </body>
 </html>
